@@ -8,29 +8,20 @@
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <style>
-	table, th, td{
-		border-collapse: collapse;
-		border: solid 1px black;
-		padding: 10px 5px;
-	}
+
 </style>
 </head>
 <body>
 	${result}
-	<table>
-		<tr>
-			<th>프로젝트 이름</th>
-			<th>버튼</th>
-		</tr>	
-		<c:forEach items="${result}" var="item">
-		<tr>
-			<td>${item}</td>
-			<td><input type="button" value="선택"/>
-		</tr>
-		</c:forEach>
-	</table>
+	<c:forEach items="${result}" var="item">
+		<p>${item.login}</p>
+		<p>${item.avatarUrl1}</p>
+		<br/>
+		<br/>
+		<br/>
+	</c:forEach>
 </body>
 <script>
-
+console.log(${result});
 </script>
 </html>
