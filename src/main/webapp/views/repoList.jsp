@@ -16,7 +16,6 @@
 </style>
 </head>
 <body>
-	${result}
 	<table>
 		<tr>
 			<th>프로젝트 이름</th>
