@@ -14,5 +14,5 @@ FRONTEND : JavaScript
 TOOL : SourceTree, STS3  
 
 ## 기능
-- 이름으로 github회원 검색해서 리포지토리 불러오기
+- github회원 검색해서 리포지토리 불러오기
 - 리포지토리 목록에서 선택하면 자동을 팀원 불러와서 md문법으로 테이블 생성
