@@ -1,9 +1,6 @@
 package co.kr.gudi.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class MainDTO {
+public class RepoDTO {
 	private String name;
 
 	public String getName() {

@@ -16,25 +16,27 @@
 </style>
 </head>
 <body>
+	<h2>${id} 유저가 보유한 리포지토리</h2>
 	<table>
 		<tr>
 			<th>프로젝트 이름</th>
 			<th>버튼</th>
 		</tr>	
-		<c:forEach items="${result}" var="item">
+		<c:forEach items="${list}" var="item">
 		<tr>
-			<td>${item}</td>
-			<td><input type="button" onclick="submit()" value="선택"/>
+			<td>${item.name}</td>
+			<td><input type="button" class="${item.name}" onclick="submit(this)" value="선택"/>
 		</tr>
 		</c:forEach>
 	</table>
 </body>
 <script>
-var id = '${id}';
-function submit(){
-    console.log($(event.target).closest('tr').find('td:first').text());
-    var projectName = $(event.target).closest('tr').find('td:first').text();
-    location.href='./result.go?projectName='+projectName+'&id='+id;
+function submit(elem){
+
+	var thisRepoName = $(elem).attr('class');
+	var id = '${id}';
+	console.log(thisRepoName);
+    location.href='./result.go?projectName='+thisRepoName+'&id='+id;
 }
 </script>
 </html>

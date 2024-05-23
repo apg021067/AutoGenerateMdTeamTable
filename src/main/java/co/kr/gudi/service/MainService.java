@@ -1,9 +1,5 @@
 package co.kr.gudi.service;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,12 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import co.kr.gudi.dto.MainDTO;
+import co.kr.gudi.dto.RepoDTO;
 import co.kr.gudi.dto.RepoMemberDTO;
+import reactor.core.publisher.Flux;
 
 @Service
 public class MainService {
@@ -26,80 +22,43 @@ public class MainService {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
 
+	// 검색
 	public ModelAndView search(String id) {
-		ModelAndView mav = new ModelAndView("repoList");
+		// 이동할 page
+		String page = "main";
+		boolean result = false;
+		ModelAndView mav = new ModelAndView();
+		// 요청할 url
+		String urlString = "/users/" + id + "/repos";
 
-		logger.info(getUserRepositories(id) + "");
+		// 1. 어디로 보낼지
+		WebClient client = WebClient.create(rootUrl);
+		// 2. 전송 방식 + 상세 URL + 전송 타입
+		Flux<RepoDTO> flux = client.get().uri(urlString).retrieve().bodyToFlux(RepoDTO.class);
 
-		mav.addObject("result", getUserRepositories(id));
+		try {
+			List<RepoDTO> list = flux.toStream().collect(Collectors.toList());
+			result = true;
+			page = "repoList";
+			mav.addObject("list", list);
+		} catch (Exception e) {
+			logger.error("요청 중 오류 발생", e);
+		}
+		mav.addObject("result", result);
 		mav.addObject("id", id);
-
+		mav.setViewName(page);
 		return mav;
 	}
 
-	public List<String> getUserRepositories(String id) {
-		String urlString = rootUrl + "/users/" + id + "/repos";
-		try {
-			// api 요청 준비
-			URL url = new URL(urlString);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod("GET");
-
-			// 연결 상태 확인
-			int responseCode = connection.getResponseCode();
-			logger.info("연결 상태 : " + responseCode);
-
-			// 연결 상태가 정상이라면(200)
-			if (responseCode == HttpURLConnection.HTTP_OK) {
-				BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-				String inputLine;
-				StringBuilder response = new StringBuilder();
-
-				// 값이 있으면
-				while ((inputLine = in.readLine()) != null) {
-					response.append(inputLine);
-				}
-				// 다 썻으니까 닫아주기
-				in.close();
-
-				// JSON 응답을 DTO 배열로 변환
-				ObjectMapper objectMapper = new ObjectMapper();
-				MainDTO[] dto = objectMapper.readValue(response.toString(), MainDTO[].class);
-
-				// 저장소 이름 목록 추출
-				return Arrays.stream(dto).map(MainDTO::getName).collect(Collectors.toList());
-			} else {
-				logger.error("GET 요청 실패: " + responseCode);
-				return List.of();
-			}
-		} catch (Exception e) {
-			logger.error("HTTP 요청 중 오류 발생", e);
-			return List.of();
-		}
-	}
-
+	// 결과
 	public ModelAndView result(String projectName, String id) {
 		ModelAndView mav = new ModelAndView("result");
+		String urlString = rootUrl + "/repos/" + id + "/" + projectName + "/contributors";
+		RestTemplate restTemplate = new RestTemplate();
+		RepoMemberDTO[] members = restTemplate.getForObject(urlString, RepoMemberDTO[].class);
 
-		mav.addObject("result", getRepoMember(projectName, id));
+		mav.addObject("result", members);
 		return mav;
 	}
 
-	public List<RepoMemberDTO> getRepoMember(String projectName, String id) {
-		String urlString = rootUrl + "/repos/" + id + "/" + projectName + "/contributors";
-		RestTemplate restTemplate = new RestTemplate();
-		try {
-			// GitHub API 엔드포인트에 GET 요청을 보냅니다.
-			RepoMemberDTO[] members = restTemplate.getForObject(urlString, RepoMemberDTO[].class);
-
-			if (members != null) {
-				return Arrays.asList(members);
-			} else {
-				return List.of();
-			}
-		} catch (Exception e) {
-			logger.error("HTTP 요청 중 오류 발생", e);
-			return List.of();
-		}
-	}
 }
