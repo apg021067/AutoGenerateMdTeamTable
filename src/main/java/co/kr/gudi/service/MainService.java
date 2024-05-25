@@ -1,6 +1,5 @@
 package co.kr.gudi.service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +29,6 @@ public class MainService {
 		ModelAndView mav = new ModelAndView();
 		// 요청할 url
 		String urlString = "/users/" + id + "/repos";
-
 		// 1. 어디로 보낼지
 		WebClient client = WebClient.create(rootUrl);
 		// 2. 전송 방식 + 상세 URL + 전송 타입
@@ -42,7 +40,7 @@ public class MainService {
 			page = "repoList";
 			mav.addObject("list", list);
 		} catch (Exception e) {
-			logger.error("요청 중 오류 발생", e);
+			logger.error("요청 중 오류 발생");
 		}
 		mav.addObject("result", result);
 		mav.addObject("id", id);
