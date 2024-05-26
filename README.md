@@ -3,7 +3,7 @@
 
 ## 목적 
 - 팀 프로젝트 리드미 작성중 팀원 확인하고 테이블 만들기 귀찮아서
-- WebClient dhk RestTemplet 학습을 위해
+- WebClient 와 RestTemplet 학습을 위해
 
 ## 인원 
 개인
