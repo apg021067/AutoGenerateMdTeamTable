@@ -3,7 +3,7 @@
 
 ## 목적 
 - 팀 프로젝트 리드미 작성중 팀원 확인하고 테이블 만들기 귀찮아서
-- HttpConnection 과 RestTemplet 학습을 위해
+- WebClient dhk RestTemplet 학습을 위해
 
 ## 인원 
 개인
@@ -18,5 +18,5 @@ FRONTEND : JavaScript
 TOOL : SourceTree, STS3  
 
 ## 기능
-- github회원 검색해서 리포지토리 불러오기
-- 리포지토리 목록에서 선택하면 자동을 팀원 불러와서 md문법으로 테이블 생성
+- github회원 검색해서 검색된 회원이 보유한 리포지토리 불러오기
+- 리포지토리 목록에서 리포지토리 선택하면 리포지토리 참여중인 팀원 불러와서 md문법으로 테이블 생성
