@@ -49,14 +49,12 @@ public class MainService {
 	}
 
 	// 결과
-	public ModelAndView result(String projectName, String id) {
-		ModelAndView mav = new ModelAndView("result");
+	public RepoMemberDTO[] result(String projectName, String id) {
 		String urlString = rootUrl + "/repos/" + id + "/" + projectName + "/contributors";
 		RestTemplate restTemplate = new RestTemplate();
 		RepoMemberDTO[] members = restTemplate.getForObject(urlString, RepoMemberDTO[].class);
 
-		mav.addObject("result", members);
-		return mav;
+		return members;
 	}
 
 }
