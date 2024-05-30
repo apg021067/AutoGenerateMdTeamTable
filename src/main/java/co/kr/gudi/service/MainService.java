@@ -40,7 +40,7 @@ public class MainService {
 			page = "repoList";
 			mav.addObject("list", list);
 		} catch (Exception e) {
-			logger.error("요청 중 오류 발생");
+			logger.info("요청 중 오류 발생");
 		}
 		mav.addObject("result", result);
 		mav.addObject("id", id);
